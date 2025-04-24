@@ -4,6 +4,8 @@ import numpy as np
 from torch.utils.data import Dataset
 from transformers import AutoFeatureExtractor
 import torch
+import random
+
 CORE_LABELS = {"yes","no","up","down","left","right","on","off","stop","go"}
 
 def load_speech_commands(
@@ -13,6 +15,7 @@ def load_speech_commands(
     sr: int = 16000,
     other_label: str = None
 ):
+    random.seed(42)
     root = Path(data_dir)
     if (root/"train"/"train").is_dir():
         base = root/"train"/"train"
@@ -50,7 +53,9 @@ def load_speech_commands(
         wavs = sorted(test_audio.glob("*.wav"))
     else:
         raise ValueError(f"Nieznany split: {split}")
-
+    
+    random.shuffle(wavs)
+    
     if max_files is not None:
         wavs = wavs[:max_files]
 
