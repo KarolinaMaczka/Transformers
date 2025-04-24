@@ -12,7 +12,7 @@ def train_model(
     epochs: int = 10,
     lr: float = 3e-4,
     device: str = None,
-    output_dir: str = "./output"
+    output_dir: str = "./saved_models"
 ) -> nn.Module:
     device = device or ("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
@@ -99,6 +99,6 @@ def train_model(
 
         model_path = os.path.join(output_dir, f"{model_name}_epoch{epoch}.pth")
         torch.save(model.state_dict(), model_path)
-        print(f"Epoch {epoch}: metrics - {log_path}, confusion matrices - {cm_path}, model - {model_path}")
+        print(f"Epoch {epoch}/{epochs} - Train loss: {train_loss:.4f}, Train F1: {train_f1:.4f} \n Val loss: {val_loss:.4f}, Val Acc: {val_acc:.4f}, Val F1: {val_f1:.4f}")
 
     return model
